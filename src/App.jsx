@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ConnectDeriv from "./pages/ConnectDeriv";
+//comentario se cambio el nombre del archivo login por Login 
 
 function App() {
   return (

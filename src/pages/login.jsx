@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
+// se cambio el nombvre del archivo
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
