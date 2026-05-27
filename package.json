@@ -1,11 +1,11 @@
 {
-  "name": "y",
+  "name": "frontend",
   "version": "1.0.0",
   "description": "pagina inicial ",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "y",
+  "main": "yes",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
