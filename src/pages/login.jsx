@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
-// se cambio el nombvre del archivo
+import axios from "axios";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -14,15 +19,32 @@ export default function Login() {
     try {
       setLoading(true);
 
-      console.log("FORM:", form); // debug
-
+      // 🔐 LOGIN
       const res = await login(form);
 
-      // 🔐 guardar token
+      // guardar token
       localStorage.setItem("token", res.token);
 
-      // 🚀 redirigir
-      navigate("/dashboard");
+      // 🔥 consultar usuario logueado
+      const userRes = await axios.get(
+        "http://localhost:3000/api/users/me",
+        {
+          headers: {
+            Authorization: `Bearer ${res.token}`,
+          },
+        }
+      );
+
+      const user = userRes.data;
+
+      console.log("USER:", user);
+
+      // ✅ VALIDAR SI TIENE TOKEN DERIV
+      if (user.hasDerivAccount === true) {
+        navigate("/dashboard");
+      } else {
+        navigate("/connect-deriv");
+      }
 
     } catch (err) {
       console.error(err);
@@ -33,7 +55,13 @@ export default function Login() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "auto",
+        padding: "20px",
+      }}
+    >
       <h2>🔐 Login</h2>
 
       <form onSubmit={handleLogin}>
@@ -42,8 +70,12 @@ export default function Login() {
           type="email"
           placeholder="Email"
           required
+          value={form.email}
           onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
+            setForm({
+              ...form,
+              email: e.target.value,
+            })
           }
         />
 
@@ -53,8 +85,12 @@ export default function Login() {
           type="password"
           placeholder="Password"
           required
+          value={form.password}
           onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
+            setForm({
+              ...form,
+              password: e.target.value,
+            })
           }
         />
 
@@ -67,7 +103,6 @@ export default function Login() {
 
       <br />
 
-      {/* 🔗 IR A REGISTRO */}
       <p>
         ¿No tienes cuenta?{" "}
         <Link to="/register">

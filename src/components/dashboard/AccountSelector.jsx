@@ -1,0 +1,40 @@
+export default function AccountSelector({
+  accounts = [],
+  selectedAccount,
+  setSelectedAccount,
+  setBalance
+}) {
+  return (
+    <div>
+
+      <h3>💳 Cuenta Deriv</h3>
+
+      <select
+        value={selectedAccount?.id || ""}
+        onChange={(e) => {
+
+          const account = accounts.find(
+            (a) =>
+              a.id === Number(e.target.value)
+          );
+
+          setSelectedAccount(account);
+
+          setBalance(
+            account?.balance || 0
+          );
+        }}
+      >
+       {accounts?.map((acc) => (
+  <option
+    key={acc.id}
+    value={acc.id}
+  >
+    {acc.account_name}
+  </option>
+))}
+      </select>
+
+    </div>
+  );
+}
