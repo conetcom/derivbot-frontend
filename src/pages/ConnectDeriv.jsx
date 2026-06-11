@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 export default function ConnectDeriv() {
+
   const [accountName, setAccountName] = useState("");
+  const [accountId, setAccountId] = useState("");
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -15,24 +17,29 @@ export default function ConnectDeriv() {
 
       setLoading(true);
 
-     const res= await api.post("/deriv/connect", {
-  token,
-  account_name: accountName
-});
-    
+      const res = await api.post(
+        "/deriv/connect",
+        {
+          token,
+          account_id: accountId,
+          account_name: accountName
+        }
+      );
 
-      console.log("DERIV:", res.data);
+      console.log(res.data);
 
-      alert("✅ Conectado a Deriv");
+      alert("✅ Cuenta conectada");
 
-      // 🔥 ir al dashboard
       navigate("/dashboard");
 
     } catch (err) {
 
       console.error(err);
 
-      alert("❌ Error conectando");
+      alert(
+        err.response?.data?.error ||
+        "Error conectando"
+      );
 
     } finally {
 
@@ -45,21 +52,39 @@ export default function ConnectDeriv() {
     <div style={{ padding: 20 }}>
 
       <h2>🔗 Conectar Deriv</h2>
-      <input
-  type="text"
-  placeholder="Nombre cuenta"
-  value={accountName}
-  onChange={(e) => setAccountName(e.target.value)}
-/>
 
       <input
         type="text"
-        placeholder="Pega tu token de Deriv"
+        placeholder="Nombre de cuenta"
+        value={accountName}
+        onChange={(e) =>
+          setAccountName(e.target.value)
+        }
+      />
+
+      <br /><br />
+
+      <input
+        type="text"
+        placeholder="Account ID (DOT123456)"
+        value={accountId}
+        onChange={(e) =>
+          setAccountId(e.target.value)
+        }
+      />
+
+      <br /><br />
+
+      <input
+        type="text"
+        placeholder="PAT de Deriv"
         value={token}
-        onChange={(e) => setToken(e.target.value)}
+        onChange={(e) =>
+          setToken(e.target.value)
+        }
         style={{
-          width: "350px",
-          padding: "10px",
+          width: "400px",
+          padding: "10px"
         }}
       />
 
@@ -69,7 +94,9 @@ export default function ConnectDeriv() {
         onClick={handleConnect}
         disabled={loading}
       >
-        {loading ? "Conectando..." : "Conectar"}
+        {loading
+          ? "Conectando..."
+          : "Conectar"}
       </button>
 
     </div>

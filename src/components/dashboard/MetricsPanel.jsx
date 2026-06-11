@@ -20,11 +20,10 @@ export default function MetricsPanel({
         💰 Balance: $
         {balance}
       </h2>
-
-      <h2>
-        📈 Profit: $
-        {sessionProfit.toFixed(2)}
-      </h2>
+<h2>
+  📈 Profit: ${metrics.pnl?.toFixed(2)}
+</h2>
+      
 
       <h3>
         🤖

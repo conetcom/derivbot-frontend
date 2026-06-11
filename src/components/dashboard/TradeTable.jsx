@@ -42,7 +42,7 @@ export default function TradeTable({
       <tbody>
 
         {trades.map((t) => {
-  console.log("TRADE:", t)
+  //console.log("TRADE:", t)
          const timeLeft =
   getTimeLeft(
     t.date_expiry

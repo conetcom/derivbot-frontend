@@ -24,7 +24,7 @@ ChartJS.register(
 export default function TradingChart({
   chartData
 }) {
-console.log("CHART DATA:", chartData);
+//console.log("CHART DATA:", chartData);
   return (
 
     <div className="card mt-3">

@@ -17,23 +17,22 @@ export default function Dashboard() {
   // =========================
   // STATES
   // =========================
-
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
-
   const [balance, setBalance] = useState(0);
-
   const [sessionProfit, setSessionProfit] = useState(0);
-
   const [metrics, setMetrics] = useState({
     trades: 0,
     wins: 0,
     losses: 0,
     pnl: 0,
     winrate: 0
+    
   });
 
-  const [botActive, setBotActive] = useState(false);
+ const [botRunning, setBotRunning] =  useState(false);
+
+const [botStatus, setBotStatus] =  useState("");
 
   const [price, setPrice] = useState(0);
 
@@ -126,7 +125,7 @@ export default function Dashboard() {
 
     console.log(res);
 
-    setBotActive(true);
+    setBotRunning(true);
 
   } catch (err) {
 
@@ -147,7 +146,7 @@ const stopBot = async () => {
       selectedAccount.id
     );
 
-    setBotActive(false);
+    setBotRunning(false);
 
   } catch (err) {
 
@@ -215,35 +214,126 @@ useEffect(() => {
 
   const socket = io("http://localhost:3000");
 
+  // =========================
+  // CONEXIÓN
+  // =========================
+
   socket.on("connect", () => {
 
     console.log("🟢 SOCKET:", socket.id);
 
-    socket.emit("join", 1); // temporal
+    socket.emit("join", 1);
+
   });
 
- socket.on("trade_update", (update) => {
+  // =========================
+  // BOT START
+  // =========================
 
-  console.log("🔥 TRADE UPDATE:", update);
+  socket.on("bot_started", () => {
 
-  setTrades(prev =>
-    prev.map(trade =>
-      String(trade.contract_id) ===
-      String(update.contract_id)
-        ? { ...trade, ...update }
-        : trade
-    )
-  );
+    console.log("🚀 BOT INICIADO");
 
-});
+    setBotRunning(true);
+
+    setBotStatus("🟢 Bot ejecutándose");
+
+  });
+
+  // =========================
+  // BOT STOP
+  // =========================
+
+  socket.on("bot_stopped", (data) => {
+
+    console.log("🛑 BOT DETENIDO", data);
+
+    setBotRunning(false);
+
+    setBotStatus(
+      data.reason === "take_profit"
+        ? "🎯 Take Profit alcanzado"
+        : data.reason === "stop_loss"
+        ? "🛑 Stop Loss alcanzado"
+        : "⛔ Bot detenido"
+    );
+
+  });
+
+  // =========================
+  // TRADE UPDATE
+  // =========================
+
+  socket.on("trade_update", (update) => {
+
+    console.log("🔥 TRADE UPDATE:", update);
+
+    setTrades(prev =>
+      prev.map(trade =>
+        String(trade.contract_id) ===
+        String(update.contract_id)
+          ? { ...trade, ...update }
+          : trade
+      )
+    );
+
+  });
+
+  // =========================
+  // NUEVO TRADE
+  // =========================
+
+  socket.on("new_trade", (trade) => {
+
+    console.log("🆕 NEW TRADE:", trade);
+
+    setTrades(prev => [
+      trade,
+      ...prev
+    ]);
+
+  });
+
+  // =========================
+  // BALANCE
+  // =========================
+
+  socket.on("balance", (data) => {
+
+    console.log("💰 BALANCE:", data);
+
+    setBalance(
+      Number(data.balance)
+    );
+
+  });
+
+  // =========================
+  // MÉTRICAS
+  // =========================
+
+  socket.on("metrics", (data) => {
+
+    console.log("📊 METRICAS:", data);
+
+    setMetrics(data);
+
+    setSessionProfit(
+      Number(data.pnl || 0)
+    );
+
+  });
+
+  // =========================
+  // PRECIO
+  // =========================
 
   socket.on("price_update", (price) => {
 
-  console.log("📈 PRICE UPDATE:", price);
+    setPrice(price);
 
-  setChartData(prev => {
+    setChartData(prev => ({
 
-    const newData = {
       labels: [
         ...prev.labels,
         new Date().toLocaleTimeString()
@@ -258,53 +348,29 @@ useEffect(() => {
           ].slice(-50)
         }
       ]
-    };
 
-   // console.log("🔥 NUEVO CHART:", newData);
+    }));
 
-    return newData;
   });
 
-});
-socket.on("new_trade", (trade) => {
+  // =========================
+  // LIMPIEZA
+  // =========================
 
-  console.log(
-    "🆕 NEW TRADE:",
-    trade
-  );
+  return () => {
 
-  setTrades(prev => [
-    trade,
-    ...prev
-  ]);
+    socket.off("connect");
+    socket.off("bot_started");
+    socket.off("bot_stopped");
+    socket.off("trade_update");
+    socket.off("new_trade");
+    socket.off("balance");
+    socket.off("metrics");
+    socket.off("price_update");
 
-});
-socket.on("balance", (data) => {
+    socket.disconnect();
 
-  console.log(
-    "💰 BALANCE RECIBIDO:",
-    data
-  );
-
-  setBalance(
-    Number(data.balance)
-  );
-
-});
- socket.on(
-    "metrics",
-    (data) => {
-
-      console.log(
-        "📊 METRICAS RECIBIDAS:",
-        data
-      );
-
-      setMetrics(data);
-    }
-  );
-
-  return () => socket.disconnect();
+  };
 
 }, []);
   useEffect(() => {
@@ -316,7 +382,7 @@ socket.on("balance", (data) => {
   // =========================
   // UI
   // =========================
-
+console.log("BOT RUNNING:", botRunning);
   return (
 
     <div className="container-fluid p-4">
@@ -336,7 +402,7 @@ socket.on("balance", (data) => {
        balance={balance}
   sessionProfit={sessionProfit}
   metrics={metrics}
-  botActive={botActive}
+  botActive={botRunning}
   price={price}
       />
 
@@ -351,8 +417,10 @@ socket.on("balance", (data) => {
   formatTime={formatTime}
 />
       <BotControls
-  startBot={startBot}
-  stopBot={stopBot}
+  
+  handleStartBot={startBot}
+  botRunning={botRunning}
+  handleStopBot={stopBot}
   manualTrade={manualTrade}
 />
 

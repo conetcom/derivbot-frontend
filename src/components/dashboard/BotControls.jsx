@@ -1,11 +1,8 @@
 export default function BotControls({
-
-  startBot,
-
-  stopBot,
-
+  botRunning,
+  handleStartBot,
+  handleStopBot,
   manualTrade
-
 }) {
 
   return (
@@ -13,15 +10,28 @@ export default function BotControls({
     <div>
 
       <button
-        onClick={startBot}
+        onClick={
+          botRunning
+            ? handleStopBot
+            : handleStartBot
+        }
+        style={{
+          backgroundColor:
+            botRunning
+              ? "#dc3545"
+              : "#28a745",
+          color: "#fff",
+          border: "none",
+          padding: "10px 20px",
+          borderRadius: "5px",
+          cursor: "pointer"
+        }}
       >
-        ▶️ Start
-      </button>
-
-      <button
-        onClick={stopBot}
-      >
-        ⛔ Stop
+        {
+          botRunning
+            ? "⛔ Stop Bot"
+            : "▶️ Start Bot"
+        }
       </button>
 
       <button
