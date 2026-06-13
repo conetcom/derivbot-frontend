@@ -265,7 +265,7 @@ useEffect(() => {
   // =========================
 
   socket.on("trade_update", (update) => {
-
+ console.log("📥 PRICE_UPDATE RECIBIDO:", price);
     console.log("🔥 TRADE UPDATE:", update);
 
     setTrades(prev =>
@@ -382,7 +382,7 @@ useEffect(() => {
   // =========================
   // UI
   // =========================
-console.log("BOT RUNNING:", botRunning);
+
   return (
 
     <div className="container-fluid p-4">

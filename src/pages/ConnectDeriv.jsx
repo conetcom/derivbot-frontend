@@ -11,43 +11,51 @@ export default function ConnectDeriv() {
 
   const navigate = useNavigate();
 
-  const handleConnect = async () => {
+ const handleConnect = async () => {
 
-    try {
+  try {
 
-      setLoading(true);
+    setLoading(true);
 
-      const res = await api.post(
-        "/deriv/connect",
-        {
-          token,
-          account_id: accountId,
-          account_name: accountName
-        }
-      );
+    console.log("TOKEN FRONT:", token);
 
-      console.log(res.data);
+    const res = await api.post(
+      "/deriv/sync-accounts",
+      {
+        token,
+        account_name: accountName
+      }
+    );
 
-      alert("✅ Cuenta conectada");
+    console.log("RESPUESTA:", res.data);
 
-      navigate("/dashboard");
+    alert("✅ Cuenta conectada");
 
-    } catch (err) {
+    navigate("/dashboard");
 
-      console.error(err);
+  } catch (err) {
 
-      alert(
-        err.response?.data?.error ||
-        "Error conectando"
-      );
+    console.error(
+      "ERROR COMPLETO:",
+      err
+    );
 
-    } finally {
+    console.error(
+      "RESPONSE:",
+      err.response?.data
+    );
 
-      setLoading(false);
+    alert(
+      err.response?.data?.error ||
+      err.message
+    );
 
-    }
-  };
+  } finally {
 
+    setLoading(false);
+
+  }
+};
   return (
     <div style={{ padding: 20 }}>
 
@@ -62,17 +70,7 @@ export default function ConnectDeriv() {
         }
       />
 
-      <br /><br />
-
-      <input
-        type="text"
-        placeholder="Account ID (DOT123456)"
-        value={accountId}
-        onChange={(e) =>
-          setAccountId(e.target.value)
-        }
-      />
-
+      
       <br /><br />
 
       <input
