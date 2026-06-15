@@ -40,8 +40,6 @@ localStorage.setItem(
         }
       );
 
-      const user = userRes.data;
-
       console.log("USER:", user);
 
       // ✅ VALIDAR SI TIENE TOKEN DERIV
