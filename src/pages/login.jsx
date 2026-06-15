@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../services/api";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -23,11 +23,16 @@ export default function Login() {
       const res = await login(form);
 
       // guardar token
-      localStorage.setItem("token", res.token);
+      const user = userRes.data;
 
+localStorage.setItem(
+  "user",
+  JSON.stringify(user)
+);
+      
       // 🔥 consultar usuario logueado
-      const userRes = await axios.get(
-        "http://localhost:3000/api/users/me",
+      const userRes = await api.get(
+        "/api/users/me",
         {
           headers: {
             Authorization: `Bearer ${res.token}`,

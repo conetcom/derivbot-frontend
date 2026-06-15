@@ -67,7 +67,7 @@ const [botStatus, setBotStatus] =  useState("");
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:3000/api/deriv/accounts",
+        "/api/deriv/accounts",
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -212,8 +212,9 @@ const getProgress = (
   // =========================
 useEffect(() => {
 
-  const socket = io("http://localhost:3000");
-
+  const socket = io("/", {
+  transports: ["websocket"]
+});
   // =========================
   // CONEXIÓN
   // =========================
@@ -222,7 +223,7 @@ useEffect(() => {
 
     console.log("🟢 SOCKET:", socket.id);
 
-    socket.emit("join", 1);
+    socket.emit("join", user?.id || userId);
 
   });
 
