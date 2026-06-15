@@ -26,7 +26,7 @@ const res = await login(form);
 localStorage.setItem("token", res.token);
 
 // 🔥 Consultar usuario logueado
-const userRes = await api.get("/api/users/me", {
+const userRes = await api.get("/users/me", {
 headers: {
 Authorization: `Bearer ${res.token}`,
 },
@@ -61,44 +61,60 @@ setLoading(false);
 }
 };
 
-return (
-<div>
-<form onSubmit={handleLogin}>
-<input
-type="email"
-placeholder="Correo electrónico"
-value={form.email}
-onChange={(e) =>
-setForm({
-...form,
-email: e.target.value,
-})
-}
-/>
+return (<div
+      style={{
+        maxWidth: "400px",
+        margin: "auto",
+        padding: "20px",
+      }}
+    >
+      <h2>🔐 Login</h2>
 
-<input
-type="password"
-placeholder="Contraseña"
-value={form.password}
-onChange={(e) =>
-setForm({
-...form,
-password: e.target.value,
-})
-}
-/>
+      <form onSubmit={handleLogin}>
 
-<button type="submit" disabled={loading}>
-{loading ? "Ingresando..." : "Iniciar sesión"}
-</button>
+        <input
+          type="email"
+          placeholder="Email"
+          required
+          value={form.email}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              email: e.target.value,
+            })
+          }
+        />
 
-<p>
-¿No tienes cuenta?{" "}
-<Link to="/register">
-Regístrate aquí
-</Link>
-</p>
-</form>
-</div>
-);
+        <br /><br />
+
+        <input
+          type="password"
+          placeholder="Password"
+          required
+          value={form.password}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              password: e.target.value,
+            })
+          }
+        />
+
+        <br /><br />
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+      </form>
+
+      <br />
+
+      <p>
+        ¿No tienes cuenta?{" "}
+        <Link to="/register">
+          Registrarse
+        </Link>
+      </p>
+    </div>
+  );
 }
