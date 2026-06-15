@@ -4,114 +4,101 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 
 export default function Login() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+const [form, setForm] = useState({
+email: "",
+password: "",
+});
 
-  const [loading, setLoading] = useState(false);
+const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+const handleLogin = async (e) => {
+e.preventDefault();
 
-    try {
-      setLoading(true);
+try {
+setLoading(true);
 
-      // 🔐 LOGIN
-      const res = await login(form);
+// 🔐 LOGIN
+const res = await login(form);
 
-      // guardar token
-      const user = userRes.data;
+// Guardar token
+localStorage.setItem("token", res.token);
+
+// 🔥 Consultar usuario logueado
+const userRes = await api.get("/api/users/me", {
+headers: {
+Authorization: `Bearer ${res.token}`,
+},
+});
+
+// Guardar usuario
+const user = userRes.data;
 
 localStorage.setItem(
-  "user",
-  JSON.stringify(user)
+"user",
+JSON.stringify(user)
 );
-      
-      // 🔥 consultar usuario logueado
-      const userRes = await api.get(
-        "/api/users/me",
-        {
-          headers: {
-            Authorization: `Bearer ${res.token}`,
-          },
-        }
-      );
 
-      console.log("USER:", user);
+console.log("USER:", user);
 
-      // ✅ VALIDAR SI TIENE TOKEN DERIV
-      if (user.hasDerivAccount === true) {
-        navigate("/dashboard");
-      } else {
-        navigate("/connect-deriv");
-      }
+// ✅ VALIDAR SI TIENE TOKEN DERIV
+if (user.hasDerivAccount === true) {
+navigate("/dashboard");
+} else {
+navigate("/connect-deriv");
+}
 
-    } catch (err) {
-      console.error(err);
-      alert("❌ Credenciales incorrectas");
-    } finally {
-      setLoading(false);
-    }
-  };
+} catch (error) {
+console.error("Error en login:", error);
 
-  return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "auto",
-        padding: "20px",
-      }}
-    >
-      <h2>🔐 Login</h2>
+alert(
+error?.response?.data?.message ||
+"Error al iniciar sesión"
+);
+} finally {
+setLoading(false);
+}
+};
 
-      <form onSubmit={handleLogin}>
+return (
+<div>
+<form onSubmit={handleLogin}>
+<input
+type="email"
+placeholder="Correo electrónico"
+value={form.email}
+onChange={(e) =>
+setForm({
+...form,
+email: e.target.value,
+})
+}
+/>
 
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={form.email}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              email: e.target.value,
-            })
-          }
-        />
+<input
+type="password"
+placeholder="Contraseña"
+value={form.password}
+onChange={(e) =>
+setForm({
+...form,
+password: e.target.value,
+})
+}
+/>
 
-        <br /><br />
+<button type="submit" disabled={loading}>
+{loading ? "Ingresando..." : "Iniciar sesión"}
+</button>
 
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          value={form.password}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              password: e.target.value,
-            })
-          }
-        />
-
-        <br /><br />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
-
-      <br />
-
-      <p>
-        ¿No tienes cuenta?{" "}
-        <Link to="/register">
-          Registrarse
-        </Link>
-      </p>
-    </div>
-  );
+<p>
+¿No tienes cuenta?{" "}
+<Link to="/register">
+Regístrate aquí
+</Link>
+</p>
+</form>
+</div>
+);
 }
