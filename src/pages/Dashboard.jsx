@@ -50,6 +50,55 @@ export default function Dashboard() {
 
   const [trades, setTrades] = useState([]);
 
+  //expira contratos
+  const getTimeLeft = (dateExpiry) => {
+  if (!dateExpiry) return 0;
+
+  const now = Math.floor(Date.now() / 1000);
+
+  return Math.max(
+    0,
+    dateExpiry - now
+  );
+};
+
+const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+
+  const secs = seconds % 60;
+
+  return `${mins}:${secs
+    .toString()
+    .padStart(2, "0")}`;
+};
+
+const getProgress = (
+  dateStart,
+  dateExpiry
+) => {
+
+  if (!dateStart || !dateExpiry)
+    return 0;
+
+  const now = Math.floor(
+    Date.now() / 1000
+  );
+
+  const total =
+    dateExpiry - dateStart;
+
+  const elapsed =
+    now - dateStart;
+
+  return Math.min(
+    100,
+    Math.max(
+      0,
+      (elapsed / total) * 100
+    )
+  );
+};
+
   // =========================
   // SOCKET
   // =========================
@@ -225,6 +274,9 @@ export default function Dashboard() {
 
       <TradeHistory
         trades={trades}
+        getTimeLeft={getTimeLeft}
+        getProgress={getProgress}
+        formatTime={formatTime}
       />
 
       <BotControls
