@@ -262,14 +262,14 @@ const getProgress = (
         selectedAccount={selectedAccount}
         setSelectedAccount={setSelectedAccount}
         setBalance={setBalance}
+         metrics={metrics}
       />
     </div>
 
     <div className="col-md-5 mb-3">
       <Metrics
         balance={balance}
-        sessionProfit={sessionProfit}
-        metrics={metrics}
+        sessionProfit={sessionProfit}       
         botActive={botRunning}
         price={price}
       />
