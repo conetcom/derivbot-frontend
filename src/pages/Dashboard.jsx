@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import BotControls from "../components/dashboard/BotControls";
 import AccountSelector from "../components/dashboard/AccountSelector";
 import Metrics from "../components/dashboard/MetricsPanel";
@@ -242,7 +242,7 @@ const getProgress = (
 
   return (
 
-    <div className="container py-4">
+    <div className="container-fluid p-4">
 
   <h2 className="mb-3 text-center">
     🚀 Trading Bot Dashboard
