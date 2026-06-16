@@ -119,18 +119,19 @@ const getProgress = (
   // =========================
 
   useEffect(() => {
-    
+    console.log("💰 BALANCE:", balance);
   }, [balance]);
 
   useEffect(() => {
-   
+    console.log("📈 PRICE:", price);
   }, [price]);
 
   useEffect(() => {
-    }, [chartData]);
+    console.log("📊 CHART DATA:", chartData);
+  }, [chartData]);
 
   useEffect(() => {
-    
+    console.log("📋 TRADES:", trades);
   }, [trades]);
 
   // =========================
@@ -240,7 +241,8 @@ const getProgress = (
   // =========================
 
   return (
-<div className="container fluid-py-4">
+
+    <div className="container py-4">
 
   <h2 className="mb-3 text-center">
     🚀 Trading Bot Dashboard
@@ -306,5 +308,5 @@ const getProgress = (
   </div>
 
 </div>
-  )
+  );
 }
