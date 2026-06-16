@@ -119,19 +119,18 @@ const getProgress = (
   // =========================
 
   useEffect(() => {
-    console.log("💰 BALANCE:", balance);
+    
   }, [balance]);
 
   useEffect(() => {
-    console.log("📈 PRICE:", price);
+   
   }, [price]);
 
   useEffect(() => {
-    console.log("📊 CHART DATA:", chartData);
-  }, [chartData]);
+    }, [chartData]);
 
   useEffect(() => {
-    console.log("📋 TRADES:", trades);
+    );
   }, [trades]);
 
   // =========================
