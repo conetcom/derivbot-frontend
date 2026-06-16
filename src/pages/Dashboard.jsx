@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+
 import BotControls from "../components/dashboard/BotControls";
 import AccountSelector from "../components/dashboard/AccountSelector";
 import Metrics from "../components/dashboard/MetricsPanel";
 import TradingChart from "../components/dashboard/TradingChart";
 import TradeHistory from "../components/dashboard/TradeTable";
+
 import {
   startBot as startBotService,
   stopBot as stopBotService
@@ -16,9 +18,15 @@ export default function Dashboard() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // =========================
+  // STATES
+  // =========================
+
   const [accounts, setAccounts] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
+
   const [balance, setBalance] = useState(0);
+
   const [sessionProfit, setSessionProfit] = useState(0);
 
   const [metrics, setMetrics] = useState({
@@ -30,7 +38,9 @@ export default function Dashboard() {
   });
 
   const [botRunning, setBotRunning] = useState(false);
+
   const [botStatus, setBotStatus] = useState("");
+
   const [price, setPrice] = useState(0);
 
   const [chartData, setChartData] = useState({
@@ -41,110 +51,130 @@ export default function Dashboard() {
   const [trades, setTrades] = useState([]);
 
   // =========================
-  // SOCKET EVENTS LIMPIOS
+  // SOCKET
   // =========================
+
   useSocket(user, {
-    bot_started: () => {
-      setBotRunning(true);
-      setBotStatus("🟢 Bot ejecutándose");
-    },
-
-    bot_stopped: (data) => {
-      setBotRunning(false);
-
-      setBotStatus(
-        data.reason === "take_profit"
-          ? "🎯 Take Profit alcanzado"
-          : data.reason === "stop_loss"
-          ? "🛑 Stop Loss alcanzado"
-          : "⛔ Bot detenido"
-      );
-    },
-
-    trade_update: (update) => {
-      setTrades((prev) =>
-        prev.map((t) =>
-          String(t.contract_id) === String(update.contract_id)
-            ? { ...t, ...update }
-            : t
-        )
-      );
-    },
-
-    new_trade: (trade) => {
-      setTrades((prev) => [trade, ...prev]);
-    },
-
-    balance: (data) => {
-      setBalance(Number(data.balance));
-    },
-
-    metrics: (data) => {
-      setMetrics(data);
-      setSessionProfit(Number(data.pnl || 0));
-    },
-
-    price_update: (p) => {
-      setPrice(p);
-
-      setChartData((prev) => ({
-        labels: [...prev.labels, new Date().toLocaleTimeString()].slice(-50),
-        datasets: [
-          {
-            label: "Precio",
-            data: [...(prev.datasets[0]?.data || []), p].slice(-50)
-          }
-        ]
-      }));
-    }
+    setTrades,
+    setBalance,
+    setMetrics,
+    setSessionProfit,
+    setPrice,
+    setChartData,
+    setBotRunning,
+    setBotStatus
   });
+
+  // =========================
+  // DEBUG
+  // =========================
+
+  useEffect(() => {
+    console.log("💰 BALANCE:", balance);
+  }, [balance]);
+
+  useEffect(() => {
+    console.log("📈 PRICE:", price);
+  }, [price]);
+
+  useEffect(() => {
+    console.log("📊 CHART DATA:", chartData);
+  }, [chartData]);
+
+  useEffect(() => {
+    console.log("📋 TRADES:", trades);
+  }, [trades]);
 
   // =========================
   // ACCOUNTS
   // =========================
+
   const fetchAccounts = async () => {
     try {
-      const token = localStorage.getItem("token");
 
-      const res = await axios.get("/api/deriv/accounts", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token =
+        localStorage.getItem("token");
+
+      const res = await axios.get(
+        "/api/deriv/accounts",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
 
       setAccounts(res.data);
 
       if (res.data.length > 0) {
-        setSelectedAccount(res.data[0]);
-        setBalance(Number(res.data[0].balance));
+
+        setSelectedAccount(
+          res.data[0]
+        );
+
+        setBalance(
+          Number(res.data[0].balance)
+        );
       }
+
     } catch (err) {
-      console.error("Error cargando cuentas:", err);
+
+      console.error(
+        "Error cargando cuentas:",
+        err
+      );
     }
   };
 
   // =========================
-  // BOT CONTROL
+  // BOT START
   // =========================
+
   const startBot = async () => {
+
     try {
-      if (!selectedAccount) return alert("Seleccione una cuenta");
+
+      if (!selectedAccount) {
+
+        alert("Seleccione una cuenta");
+        return;
+      }
 
       await startBotService({
-        accountId: selectedAccount.id,
+
+        accountId:
+          selectedAccount.id,
+
         symbol: "R_75",
+
         stake: 1
       });
 
-      setBotRunning(true);
     } catch (err) {
-      alert(err.response?.data?.error || err.message);
+
+      console.error(err);
+
+      alert(
+        err.response?.data?.error ||
+        err.message
+      );
     }
   };
 
+  // =========================
+  // BOT STOP
+  // =========================
+
   const stopBot = async () => {
+
     try {
-      await stopBotService(selectedAccount.id);
-      setBotRunning(false);
+
+      await stopBotService(
+        selectedAccount.id
+      );
+
     } catch (err) {
+
       console.error(err);
     }
   };
@@ -152,6 +182,7 @@ export default function Dashboard() {
   // =========================
   // INIT
   // =========================
+
   useEffect(() => {
     fetchAccounts();
   }, []);
@@ -159,10 +190,19 @@ export default function Dashboard() {
   // =========================
   // UI
   // =========================
+
   return (
+
     <div className="container-fluid p-4">
 
-      <h2>🚀 Trading Bot Dashboard</h2>
+      <h2 className="mb-3">
+        🚀 Trading Bot Dashboard
+      </h2>
+
+      <div className="mb-2">
+        <strong>Estado:</strong>{" "}
+        {botStatus}
+      </div>
 
       <AccountSelector
         accounts={accounts}
@@ -179,18 +219,20 @@ export default function Dashboard() {
         price={price}
       />
 
-      <TradingChart chartData={chartData} />
+      <TradingChart
+        chartData={chartData}
+      />
 
-      <TradeHistory trades={trades} 
-       getTimeLeft={getTimeLeft}
-  getProgress={getProgress}
-  formatTime={formatTime}/>
+      <TradeHistory
+        trades={trades}
+      />
 
       <BotControls
         handleStartBot={startBot}
         handleStopBot={stopBot}
         botRunning={botRunning}
       />
+
     </div>
   );
 }
