@@ -29,7 +29,7 @@ export default function Register() {
       alert("✅ Usuario registrado");
 
       // 🚀 redirigir a login
-      navigate("/connectDeriv");
+      navigate("/login");
 
     } catch (err) {
       console.error(err);

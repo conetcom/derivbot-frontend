@@ -92,7 +92,7 @@ export default function useSocket(
     // =========================
     const onBalance = (data) => {
       console.log("💰 BALANCE:", data);
-
+console.log("NEW TRADE CONTRACT:", data.contract_id);
       setBalance?.(Number(data.balance));
     };
 

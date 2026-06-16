@@ -241,25 +241,30 @@ const getProgress = (
   // =========================
 
   return (
+<div className="container fluid-py-4">
 
-    <div className="container-fluid p-4">
+  <h2 className="mb-3 text-center">
+    🚀 Trading Bot Dashboard
+  </h2>
 
-      <h2 className="mb-3">
-        🚀 Trading Bot Dashboard
-      </h2>
+  <div className="mb-3 text-center">
+    <strong>Estado:</strong>{" "}
+    {botStatus || "Desconectado"}
+  </div>
 
-      <div className="mb-2">
-        <strong>Estado:</strong>{" "}
-        {botStatus}
-      </div>
+  {/* ACCOUNT + METRICS */}
+  <div className="row justify-content-center mb-4">
 
+    <div className="col-md-5 mb-3">
       <AccountSelector
         accounts={accounts}
         selectedAccount={selectedAccount}
         setSelectedAccount={setSelectedAccount}
         setBalance={setBalance}
       />
+    </div>
 
+    <div className="col-md-5 mb-3">
       <Metrics
         balance={balance}
         sessionProfit={sessionProfit}
@@ -267,24 +272,40 @@ const getProgress = (
         botActive={botRunning}
         price={price}
       />
+    </div>
 
-      <TradingChart
-        chartData={chartData}
-      />
+  </div>
 
+  {/* CHART */}
+  <div className="row mb-4">
+    <div className="col-12">
+      <TradingChart chartData={chartData} />
+    </div>
+  </div>
+
+  {/* TRADE HISTORY */}
+  <div className="row mb-4">
+    <div className="col-12">
       <TradeHistory
         trades={trades}
         getTimeLeft={getTimeLeft}
         getProgress={getProgress}
         formatTime={formatTime}
       />
+    </div>
+  </div>
 
+  {/* BOT CONTROLS */}
+  <div className="row justify-content-center">
+    <div className="col-md-6">
       <BotControls
         handleStartBot={startBot}
         handleStopBot={stopBot}
         botRunning={botRunning}
       />
-
     </div>
-  );
+  </div>
+
+</div>
+  )
 }
