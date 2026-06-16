@@ -130,7 +130,7 @@ const getProgress = (
     }, [chartData]);
 
   useEffect(() => {
-    );
+    
   }, [trades]);
 
   // =========================
