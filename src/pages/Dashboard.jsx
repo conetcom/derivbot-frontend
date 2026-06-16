@@ -181,7 +181,10 @@ export default function Dashboard() {
 
       <TradingChart chartData={chartData} />
 
-      <TradeHistory trades={trades} />
+      <TradeHistory trades={trades} 
+       getTimeLeft={getTimeLeft}
+  getProgress={getProgress}
+  formatTime={formatTime}/>
 
       <BotControls
         handleStartBot={startBot}
