@@ -241,70 +241,78 @@ const getProgress = (
   // =========================
 
   return (
+<div className="container-fluid">
 
-    <div className="container-fluid p-4">
+  <div
+    className="mx-auto p-4"
+    style={{
+      maxWidth: "1400px"
+    }}
+  >
 
-  <h2 className="mb-3 text-center">
-    🚀 Trading Bot Dashboard
-  </h2>
+    <h2 className="mb-3 text-center">
+      🚀 Trading Bot Dashboard
+    </h2>
 
-  <div className="mb-3 text-center">
-    <strong>Estado:</strong>{" "}
-    {botStatus || "Desconectado"}
-  </div>
-
-  {/* ACCOUNT + METRICS */}
-  <div className="row justify-content-center mb-4">
-
-    <div className="col-md-5 mb-3">
-      <AccountSelector
-        accounts={accounts}
-        selectedAccount={selectedAccount}
-        setSelectedAccount={setSelectedAccount}
-        setBalance={setBalance}
-         metrics={metrics}
-      />
+    <div className="mb-3 text-center">
+      <strong>Estado:</strong>{" "}
+      {botStatus || "Desconectado"}
     </div>
 
-    <div className="col-md-5 mb-3">
-      <Metrics
-        balance={balance}
-        sessionProfit={sessionProfit}       
-        botActive={botRunning}
-        price={price}
-      />
+    {/* ACCOUNT + METRICS */}
+    <div className="row justify-content-center mb-4">
+
+      <div className="col-md-5 mb-3">
+        <AccountSelector
+          accounts={accounts}
+          selectedAccount={selectedAccount}
+          setSelectedAccount={setSelectedAccount}
+          setBalance={setBalance}
+        />
+      </div>
+
+      <div className="col-md-5 mb-3">
+        <Metrics
+          balance={balance}
+          sessionProfit={sessionProfit}
+          metrics={metrics}
+          botActive={botRunning}
+          price={price}
+        />
+      </div>
+
     </div>
 
-  </div>
-
-  {/* CHART */}
-  <div className="row mb-4">
-    <div className="col-12">
-      <TradingChart chartData={chartData} />
+    {/* CHART */}
+    <div className="row mb-4">
+      <div className="col-12">
+        <TradingChart chartData={chartData} />
+      </div>
     </div>
-  </div>
 
-  {/* TRADE HISTORY */}
-  <div className="row mb-4">
-    <div className="col-12">
-      <TradeHistory
-        trades={trades}
-        getTimeLeft={getTimeLeft}
-        getProgress={getProgress}
-        formatTime={formatTime}
-      />
+    {/* TRADE HISTORY */}
+    <div className="row mb-4">
+      <div className="col-12">
+        <TradeHistory
+          trades={trades}
+          getTimeLeft={getTimeLeft}
+          getProgress={getProgress}
+          formatTime={formatTime}
+        />
+      </div>
     </div>
-  </div>
 
-  {/* BOT CONTROLS */}
-  <div className="row justify-content-center">
-    <div className="col-md-6">
-      <BotControls
-        handleStartBot={startBot}
-        handleStopBot={stopBot}
-        botRunning={botRunning}
-      />
+    {/* BOT CONTROLS */}
+    <div className="row justify-content-center">
+      <div className="col-md-6">
+        <BotControls
+          handleStartBot={startBot}
+          handleStopBot={stopBot}
+          botRunning={botRunning}
+        />
+      </div>
     </div>
+
   </div>
 
 </div>

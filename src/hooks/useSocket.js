@@ -15,19 +15,22 @@ export default function useSocket(
   } = {}
 ) {
   useEffect(() => {
-    if (!user?.id) return;
 
-    socket.connect();
+  if (!user?.id) return;
 
-    // =========================
-    // CONNECT + JOIN ROOM
-    // =========================
-    const onConnect = () => {
-      console.log("🟢 SOCKET:", socket.id);
-      socket.emit("join", user.id);
-    };
+  socket.connect();
 
-    socket.on("connect", onConnect);
+  const joinRoom = () => {
+  console.log("🟢 SOCKET:", socket.id);
+
+  socket.emit("join", user.id);
+};
+
+if (socket.connected) {
+  joinRoom();
+}
+
+socket.on("connect", joinRoom);
 
     // =========================
     // BOT STARTED
@@ -140,7 +143,7 @@ console.log("NEW TRADE CONTRACT:", data.contract_id);
     // CLEANUP (CRÍTICO)
     // =========================
     return () => {
-      socket.off("connect", onConnect);
+      socket.off("connect", joinRoom);
       socket.off("bot_started", onBotStarted);
       socket.off("bot_stopped", onBotStopped);
       socket.off("trade_update", onTradeUpdate);
@@ -149,7 +152,6 @@ console.log("NEW TRADE CONTRACT:", data.contract_id);
       socket.off("metrics", onMetrics);
       socket.off("price_update", onPriceUpdate);
 
-      socket.disconnect();
-    };
+   };
   }, [user]);
 }
