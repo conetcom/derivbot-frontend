@@ -116,26 +116,29 @@ console.log("NEW TRADE CONTRACT:", data.contract_id);
     // =========================
     // PRICE UPDATE (CRÍTICO OPTIMIZADO)
     // =========================
-    const onPriceUpdate = (price) => {
-      setPrice?.(price);
+    const onPriceUpdate = (data) => {
 
-      setChartData?.((prev) => ({
-        labels: [
-          ...prev.labels,
-          new Date().toLocaleTimeString()
-        ].slice(-50),
+  console.log("📈 PRICE UPDATE:", data);
 
-        datasets: [
-          {
-            label: "Precio",
-            data: [
-              ...(prev.datasets[0]?.data || []),
-              price
-            ].slice(-50)
-          }
-        ]
-      }));
-    };
+  setPrice?.(data.price);
+
+  setChartData?.((prev) => ({
+    labels: [
+      ...prev.labels,
+      new Date().toLocaleTimeString()
+    ].slice(-50),
+
+    datasets: [
+      {
+        label: "Precio",
+        data: [
+          ...(prev.datasets[0]?.data || []),
+          data.price
+        ].slice(-50)
+      }
+    ]
+  }));
+};
 
     socket.on("price_update", onPriceUpdate);
 
