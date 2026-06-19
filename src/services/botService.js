@@ -1,11 +1,20 @@
 import axios from "axios";
 
-const API_URL = "/api/bot";
+const API_URL =
+  "/api/bot";
 
 // ===============================
 // 🚀 START BOT
 // ===============================
-export const startBot = async  => {
+export const startBot = async ({
+  accountId,
+  symbol,
+  stake,
+  strategy,
+  targetProfit = 10,
+  stopLoss = 10,
+  maxDrawdown = 20
+}) => {
 
   const token =
     localStorage.getItem("token");
@@ -13,6 +22,15 @@ export const startBot = async  => {
   const res = await axios.post(
 
     `${API_URL}/start/${accountId}`,
+
+    {
+      symbol,
+      stake,
+      strategy,
+      targetProfit,
+      stopLoss,
+      maxDrawdown
+    },
 
     {
       headers: {
