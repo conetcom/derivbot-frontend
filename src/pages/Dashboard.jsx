@@ -227,15 +227,29 @@ const fetchBotSettings = async () => {
         return;
       }
 
-      await startBotService({
+     await startBotService({
 
-        accountId:
-          selectedAccount.id,
+  accountId:
+    selectedAccount.id,
 
-        symbol: "R_75",
+  symbol:
+    botSettings.symbol,
 
-        stake: 1
-      });
+  strategy:
+    botSettings.strategy,
+
+  stake:
+    botSettings.stake,
+
+  targetProfit:
+    botSettings.target_profit,
+
+  stopLoss:
+    botSettings.stop_loss,
+
+  maxDrawdown:
+    botSettings.max_drawdown
+});
 
     } catch (err) {
 
