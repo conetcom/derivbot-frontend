@@ -6,6 +6,9 @@ import AccountSelector from "../components/dashboard/AccountSelector";
 import Metrics from "../components/dashboard/MetricsPanel";
 import TradingChart from "../components/dashboard/TradingChart";
 import TradeHistory from "../components/dashboard/TradeTable";
+import { useNavigate } from "react-router-dom";
+
+
 
 import {
   startBot as startBotService,
@@ -16,6 +19,7 @@ import useSocket from "../hooks/useSocket";
 
 export default function Dashboard() {
 
+const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
   // =========================
@@ -174,6 +178,40 @@ const getProgress = (
       );
     }
   };
+  
+const fetchBotSettings = async () => {
+  try {
+
+    const token =
+      localStorage.getItem("token");
+
+    const res = await axios.get(
+      "/api/bot-settings",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (res.data) {
+
+      setBotSettings(res.data);
+
+      console.log(
+        "⚙️ Configuración cargada:",
+        res.data
+      );
+    }
+
+  } catch (err) {
+
+    console.error(
+      "Error cargando configuración:",
+      err
+    );
+  }
+};
 
   // =========================
   // BOT START
@@ -233,8 +271,12 @@ const getProgress = (
   // =========================
 
   useEffect(() => {
-    fetchAccounts();
-  }, []);
+
+  fetchAccounts();
+
+  fetchBotSettings();
+
+}, []);
 
   // =========================
   // UI
@@ -258,7 +300,16 @@ const getProgress = (
       <strong>Estado:</strong>{" "}
       {botStatus || "Desconectado"}
     </div>
-
+<div className="d-flex justify-content-end mb-3">
+  <button
+    className="btn btn-primary"
+    onClick={() =>
+      navigate("/bot-settings")
+    }
+  >
+    ⚙️ Configurar Bot
+  </button>
+</div>
     {/* ACCOUNT + METRICS */}
     <div className="row justify-content-center mb-4">
 

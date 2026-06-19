@@ -4,7 +4,7 @@ import Login from "./pages/login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ConnectDeriv from "./pages/ConnectDeriv";
-//comentario se cambio el nombre del archivo login por Login 
+import BotSettings from "./pages/BotSettings";//comentario se cambio el nombre del archivo login por Login 
 
 function App() {
   return (
@@ -18,7 +18,8 @@ function App() {
 
         {/* opcional: ruta raíz */}
         <Route path="/" element={<Login />} />
-
+        <Route  path="/bot-settings"  element={<BotSettings />}
+/>
       </Routes>
     </Router>
   );
