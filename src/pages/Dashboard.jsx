@@ -102,6 +102,39 @@ const getProgress = (
     )
   );
 };
+const fetchBotSettings = async () => {
+  try {
+
+    const token =
+      localStorage.getItem("token");
+
+    const res = await axios.get(
+      "/api/bot-settings",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (res.data) {
+
+      setBotSettings(res.data);
+
+      console.log(
+        "⚙️ Configuración cargada:",
+        res.data
+      );
+    }
+
+  } catch (err) {
+
+    console.error(
+      "Error cargando configuración:",
+      err
+    );
+  }
+};
 
   // =========================
   // SOCKET
@@ -178,40 +211,6 @@ const getProgress = (
       );
     }
   };
-  
-const fetchBotSettings = async () => {
-  try {
-
-    const token =
-      localStorage.getItem("token");
-
-    const res = await axios.get(
-      "/api/bot-settings",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
-    if (res.data) {
-
-      setBotSettings(res.data);
-
-      console.log(
-        "⚙️ Configuración cargada:",
-        res.data
-      );
-    }
-
-  } catch (err) {
-
-    console.error(
-      "Error cargando configuración:",
-      err
-    );
-  }
-};
 
   // =========================
   // BOT START
@@ -227,7 +226,7 @@ const fetchBotSettings = async () => {
         return;
       }
 
-     await startBotService({
+      await startBotService({
 
   accountId:
     selectedAccount.id,
@@ -242,13 +241,13 @@ const fetchBotSettings = async () => {
     botSettings.stake,
 
   targetProfit:
-    botSettings.target_profit,
+    botSettings.targetProfit,
 
   stopLoss:
-    botSettings.stop_loss,
+    botSettings.stopLoss,
 
   maxDrawdown:
-    botSettings.max_drawdown
+    botSettings.maxDrawdown
 });
 
     } catch (err) {
@@ -285,12 +284,8 @@ const fetchBotSettings = async () => {
   // =========================
 
   useEffect(() => {
-
-  fetchAccounts();
-
-  fetchBotSettings();
-
-}, []);
+    fetchAccounts();
+  }, []);
 
   // =========================
   // UI
