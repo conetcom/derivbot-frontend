@@ -119,12 +119,13 @@ const fetchBotSettings = async () => {
 
     if (res.data) {
 
-      setBotSettings(res.data);
+      botSettings(res.data);
 
       console.log(
         "⚙️ Configuración cargada:",
         res.data
       );
+      navigate("/dashboard");
     }
 
   } catch (err) {
