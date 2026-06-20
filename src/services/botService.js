@@ -7,13 +7,7 @@ const API_URL =
 // 🚀 START BOT
 // ===============================
 export const startBot = async ({
-  accountId,
-  symbol,
-  stake,
-  strategy,
-  targetProfit = 10,
-  stopLoss = 10,
-  maxDrawdown = 20
+  accountId
 }) => {
 
   const token =
@@ -23,14 +17,7 @@ export const startBot = async ({
 
     `${API_URL}/start/${accountId}`,
 
-    {
-      symbol,
-      stake,
-      strategy,
-      targetProfit,
-      stopLoss,
-      maxDrawdown
-    },
+    {},
 
     {
       headers: {

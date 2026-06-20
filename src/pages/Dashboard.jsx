@@ -119,13 +119,13 @@ const fetchBotSettings = async () => {
 
     if (res.data) {
 
-      botSettings(res.data);
+      setBotSettings(res.data);
 
       console.log(
         "⚙️ Configuración cargada:",
         res.data
       );
-      navigate("/dashboard");
+      
     }
 
   } catch (err) {
@@ -218,50 +218,27 @@ const fetchBotSettings = async () => {
   // =========================
 
   const startBot = async () => {
+  try {
 
-    try {
-
-      if (!selectedAccount) {
-
-        alert("Seleccione una cuenta");
-        return;
-      }
-
-      await startBotService({
-
-  accountId:
-    selectedAccount.id,
-
-  symbol:
-    botSettings.symbol,
-
-  strategy:
-    botSettings.strategy,
-
-  stake:
-    botSettings.stake,
-
-  targetProfit:
-    botSettings.targetProfit,
-
-  stopLoss:
-    botSettings.stopLoss,
-
-  maxDrawdown:
-    botSettings.maxDrawdown
-});
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert(
-        err.response?.data?.error ||
-        err.message
-      );
+    if (!selectedAccount) {
+      alert("Seleccione una cuenta");
+      return;
     }
-  };
 
+    await startBotService({
+      accountId: selectedAccount.id
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      err.response?.data?.error ||
+      err.message
+    );
+  }
+};
   // =========================
   // BOT STOP
   // =========================

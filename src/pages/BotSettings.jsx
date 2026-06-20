@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const navigate = useNavigate();
 
 export default function BotSettings() {
   const [settings, setSettings] = useState({
@@ -41,6 +42,7 @@ export default function BotSettings() {
       );
 
       alert("Configuración guardada");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       alert("Error guardando configuración");
