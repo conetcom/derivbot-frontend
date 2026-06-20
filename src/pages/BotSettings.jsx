@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const navigate = useNavigate();
+
 
 export default function BotSettings() {
+  const navigate = useNavigate();
   const [settings, setSettings] = useState({
     symbol: "R_75",
     strategy: "sma",
