@@ -152,7 +152,7 @@ const getProgress = (
         }
       );
 
-      setAccounts(res.data);
+    
 
       if (res.data.length > 0) {
 
