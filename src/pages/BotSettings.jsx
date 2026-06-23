@@ -8,7 +8,7 @@ export default function BotSettings() {
   const navigate = useNavigate();
 
   const [accounts, setAccounts] = useState([]);
-  const [selectedAccount, setSelectedAccount] = useState(null);
+  //const [selectedAccount, setSelectedAccount] = useState(null);
 
   const [settings, setSettings] = useState({
     symbol: "R_75",
