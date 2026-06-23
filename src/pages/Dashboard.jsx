@@ -22,7 +22,7 @@ const navigate = useNavigate();
   // =========================
   // STATES
   // =========================
-
+const [accounts, setAccounts] = useState([]);
   const [balance, setBalance] = useState(0);
 
   const [sessionProfit, setSessionProfit] = useState(0);
@@ -152,7 +152,7 @@ const getProgress = (
         }
       );
 
-    
+      setAccounts(res.data);
 
       if (res.data.length > 0) {
 
