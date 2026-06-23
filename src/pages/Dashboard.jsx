@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BotControls from "../components/dashboard/BotControls";
-import AccountSelector from "../components/dashboard/AccountSelector";
 import Metrics from "../components/dashboard/MetricsPanel";
 import TradingChart from "../components/dashboard/TradingChart";
 import TradeHistory from "../components/dashboard/TradeTable";
 import { useNavigate } from "react-router-dom";
-
-
 
 import {
   startBot as startBotService,
@@ -25,9 +22,6 @@ const navigate = useNavigate();
   // =========================
   // STATES
   // =========================
-
-  const [accounts, setAccounts] = useState([]);
-  const [selectedAccount, setSelectedAccount] = useState(null);
 
   const [balance, setBalance] = useState(0);
 
@@ -102,40 +96,7 @@ const getProgress = (
     )
   );
 };
-const fetchBotSettings = async () => {
-  try {
 
-    const token =
-      localStorage.getItem("token");
-
-    const res = await axios.get(
-      "/api/bot-settings",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
-    if (res.data) {
-
-      setBotSettings(res.data);
-
-      console.log(
-        "⚙️ Configuración cargada:",
-        res.data
-      );
-      
-    }
-
-  } catch (err) {
-
-    console.error(
-      "Error cargando configuración:",
-      err
-    );
-  }
-};
 
   // =========================
   // SOCKET
@@ -297,37 +258,25 @@ const fetchBotSettings = async () => {
     ⚙️ Configurar Bot
   </button>
 </div>
-    {/* ACCOUNT + METRICS */}
-    <div className="row justify-content-center mb-4">
+   <div className="row mb-4">
 
-      <div className="col-md-5 mb-3">
-        <AccountSelector
-          accounts={accounts}
-          selectedAccount={selectedAccount}
-          setSelectedAccount={setSelectedAccount}
-          setBalance={setBalance}
-        />
-      </div>
+  <div className="col-lg-4">
+    <Metrics
+      balance={balance}
+      sessionProfit={sessionProfit}
+      metrics={metrics}
+      botActive={botRunning}
+      price={price}
+    />
+  </div>
 
-      <div className="col-md-5 mb-3">
-        <Metrics
-          balance={balance}
-          sessionProfit={sessionProfit}
-          metrics={metrics}
-          botActive={botRunning}
-          price={price}
-        />
-      </div>
+  <div className="col-lg-8">
+    <TradingChart chartData={chartData} />
+  </div>
 
-    </div>
+</div>
 
-    {/* CHART */}
-    <div className="row mb-4">
-      <div className="col-12">
-        <TradingChart chartData={chartData} />
-      </div>
-    </div>
-
+    
     {/* TRADE HISTORY */}
     <div className="row mb-4">
       <div className="col-12">
