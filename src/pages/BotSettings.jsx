@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AccountSelector from "../components/dashboard/AccountSelector";
+import Metrics from "../components/dashboard/MetricsPanel";
 
 export default function BotSettings() {
 
