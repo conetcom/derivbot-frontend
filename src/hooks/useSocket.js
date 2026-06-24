@@ -122,22 +122,22 @@ console.log("NEW TRADE CONTRACT:", data.contract_id);
 
   setPrice?.(data.price);
 
-  setChartData?.((prev) => ({
-    labels: [
-      ...prev.labels,
-      new Date().toLocaleTimeString()
-    ].slice(-50),
+  setChartData?.((prev = { labels: [], datasets: [] }) => ({
+  labels: [
+    ...(prev.labels || []),
+    new Date().toLocaleTimeString()
+  ].slice(-50),
 
-    datasets: [
-      {
-        label: "Precio",
-        data: [
-          ...(prev.datasets[0]?.data || []),
-          data.price
-        ].slice(-50)
-      }
-    ]
-  }));
+  datasets: [
+    {
+      label: "Precio",
+      data: [
+        ...(prev.datasets?.[0]?.data || []),
+        Number(data.price)
+      ].slice(-50)
+    }
+  ]
+}));
 };
 
     socket.on("price_update", onPriceUpdate);

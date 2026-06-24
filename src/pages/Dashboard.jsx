@@ -134,33 +134,7 @@ const getProgress = (
   // ACCOUNTS
   // =========================
 
-  const fetchAccounts = async () => {
-    try {
-
-      const token =
-        localStorage.getItem("token");
-
-      const res = await axios.get(
-        "/api/deriv/accounts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      setAccounts(res.data);
-
-     
-
-    } catch (err) {
-
-      console.error(
-        "Error cargando cuentas:",
-        err
-      );
-    }
-  };
+ 
 
   // =========================
   // BOT START
