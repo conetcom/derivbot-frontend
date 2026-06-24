@@ -206,12 +206,16 @@ return (
               💳 Cuenta Deriv
             </h5>
           </div>
-          <div className="col-lg-4">
-              <Metrics
-                balance={balance}
-               
-              />
-            </div>
+         <div className="card mb-3">
+  <div className="card-body text-center">
+    <h6>💰 Balance</h6>
+
+    <h3 className="text-success">
+      {selectedAccount?.currency || "USD"}{" "}
+      {Number(balance || 0).toFixed(2)}
+    </h3>
+  </div>
+</div>
 
           <div className="card-body">
 
