@@ -175,9 +175,7 @@ const startBot = async () => {
   // INIT
   // =========================
 
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
+
 
   // =========================
   // UI
