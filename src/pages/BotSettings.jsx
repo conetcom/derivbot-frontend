@@ -108,18 +108,27 @@ if (res.data) {
     }));
   };
 
-  const handleSave = async () => {
+const handleSave = async () => {
 
   try {
 
+    console.log(
+      "selectedAccount:",
+      selectedAccount
+    );
+
+    console.log(
+      "payload:",
+      {
+        ...settings,
+        deriv_account:
+          selectedAccount?.id
+      }
+    );
+
     const token =
       localStorage.getItem("token");
-console.log("selectedAccount:", selectedAccount);
 
-console.log("payload:", {
-  ...settings,
-  deriv_account: selectedAccount?.id
-});
     await axios.post(
       "/api/bot-settings",
       {
