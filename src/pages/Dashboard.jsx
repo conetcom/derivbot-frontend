@@ -22,12 +22,8 @@ const navigate = useNavigate();
   // =========================
   // STATES
   // =========================
-const [accounts, setAccounts] = useState([]);
-const [selectedAccount, setSelectedAccount] = useState(null);
   const [balance, setBalance] = useState(0);
-
   const [sessionProfit, setSessionProfit] = useState(0);
-
   const [metrics, setMetrics] = useState({
     trades: 0,
     wins: 0,
@@ -200,17 +196,15 @@ const startBot = async () => {
 
   const stopBot = async () => {
 
-    try {
+  try {
 
-      await stopBotService(
-        selectedAccount.id
-      );
+    await stopBotService();
 
-    } catch (err) {
+  } catch (err) {
 
-      console.error(err);
-    }
-  };
+    console.error(err);
+  }
+};
 
   // =========================
   // INIT

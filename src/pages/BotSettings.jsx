@@ -186,11 +186,12 @@ return (
 
           <div className="card-body">
 
-            <AccountSelector
-              accounts={accounts}
-              selectedAccount={selectedAccount}
-              setSelectedAccount={setSelectedAccount}
-            />
+           <AccountSelector
+           accounts={accounts}
+           selectedAccount={selectedAccount}
+           setSelectedAccount={setSelectedAccount}
+          setBalance={setBalance}
+          />
 
           </div>
 
