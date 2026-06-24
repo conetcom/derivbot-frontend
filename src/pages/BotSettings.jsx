@@ -109,6 +109,12 @@ if (res.data) {
   };
 
 const handleSave = async () => {
+  console.log("selectedAccount:", selectedAccount);
+
+  console.log("payload:", {
+    ...settings,
+    deriv_account: selectedAccount?.id
+  });
 
   try {
 
@@ -298,8 +304,8 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="targetProfit"
-                  value={settings.target_Profit}
+                  name="target_profit"
+                  value={settings.target_profit}
                   onChange={handleChange}
                 />
               </div>
@@ -317,8 +323,8 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="stop_Loss"
-                  value={settings.stopLoss}
+                  name="stop_loss"
+                  value={settings.stop_loss}
                   onChange={handleChange}
                 />
               </div>
@@ -331,8 +337,8 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="maxDrawdown"
-                  value={settings.maxDrawdown}
+                  name="max_drawdown"
+                  value={settings.max_drawdown}
                   onChange={handleChange}
                 />
               </div>
