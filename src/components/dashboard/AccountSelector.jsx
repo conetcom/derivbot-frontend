@@ -10,44 +10,29 @@ export default function AccountSelector({
 
       <select
         value={selectedAccount?.id || ""}
-        onChange={(e) => {
+       onChange={(e) => {
 
-          const account = accounts.find(
-            (a) =>
-              Number(a.id) === Number(e.target.value)
-          );
+  const account = accounts.find(
+    (a) =>
+      Number(a.id) === Number(e.target.value)
+  );
 
-          console.log(
-            "account:",
-            account
-          );
+  console.log("account", account);
+  console.log(
+    "setSelectedAccount",
+    typeof setSelectedAccount
+  );
+  console.log(
+    "setBalance",
+    typeof setBalance
+  );
 
-          console.log(
-            "setSelectedAccount:",
-            typeof setSelectedAccount
-          );
+  setSelectedAccount(account);
 
-          console.log(
-            "setBalance:",
-            typeof setBalance
-          );
-
-          if (
-            typeof setSelectedAccount ===
-            "function"
-          ) {
-            setSelectedAccount(account);
-          }
-
-          if (
-            typeof setBalance ===
-            "function"
-          ) {
-            setBalance(
-              account?.balance || 0
-            );
-          }
-        }}
+  setBalance(
+    account?.balance || 0
+  );
+}}
       >
         {accounts?.map((acc) => (
           <option
