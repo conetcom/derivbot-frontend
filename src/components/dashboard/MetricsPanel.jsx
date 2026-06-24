@@ -1,16 +1,22 @@
 export default function MetricsPanel({
-  balance,
-  sessionProfit,
-  metrics,
-  botActive,
-  price
+  balance = 0,
+  sessionProfit = 0,
+  metrics = {
+    trades: 0,
+    wins: 0,
+    losses: 0,
+    pnl: 0,
+    winrate: 0
+  },
+  botActive = false,
+  price = 0
 }) {
 
   const profit =
-    Number(metrics.pnl || 0);
+    Number(metrics?.pnl || 0);
 
   const winrate =
-    Number(metrics.winrate || 0);
+    Number(metrics?.winrate || 0);
 
   return (
 
@@ -88,20 +94,20 @@ export default function MetricsPanel({
 
         <div className="d-flex justify-content-between mb-2">
           <span>Operaciones</span>
-          <strong>{metrics.trades}</strong>
+          <strong>{metrics?.trades}</strong>
         </div>
 
         <div className="d-flex justify-content-between mb-2">
           <span>Ganadas</span>
           <strong className="text-success">
-            {metrics.wins}
+            {metrics?.wins}
           </strong>
         </div>
 
         <div className="d-flex justify-content-between mb-2">
           <span>Perdidas</span>
           <strong className="text-danger">
-            {metrics.losses}
+            {metrics?.losses}
           </strong>
         </div>
 
