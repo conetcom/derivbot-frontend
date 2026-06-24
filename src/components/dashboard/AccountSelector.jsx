@@ -6,7 +6,6 @@ export default function AccountSelector({
 }) {
   return (
     <div>
-
       <h3>💳 Cuenta Deriv</h3>
 
       <select
@@ -15,26 +14,50 @@ export default function AccountSelector({
 
           const account = accounts.find(
             (a) =>
-              a.id === Number(e.target.value)
+              Number(a.id) === Number(e.target.value)
           );
 
-          setSelectedAccount(account);
-
-          setBalance(
-            account?.balance || 0
+          console.log(
+            "account:",
+            account
           );
+
+          console.log(
+            "setSelectedAccount:",
+            typeof setSelectedAccount
+          );
+
+          console.log(
+            "setBalance:",
+            typeof setBalance
+          );
+
+          if (
+            typeof setSelectedAccount ===
+            "function"
+          ) {
+            setSelectedAccount(account);
+          }
+
+          if (
+            typeof setBalance ===
+            "function"
+          ) {
+            setBalance(
+              account?.balance || 0
+            );
+          }
         }}
       >
-       {accounts?.map((acc) => (
-  <option
-    key={acc.id}
-    value={acc.id}
-  >
-    {acc.account_name}
-  </option>
-))}
+        {accounts?.map((acc) => (
+          <option
+            key={acc.id}
+            value={acc.id}
+          >
+            {acc.account_name}
+          </option>
+        ))}
       </select>
-
     </div>
   );
 }
