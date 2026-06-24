@@ -15,6 +15,8 @@ import {
 import useSocket from "../hooks/useSocket";
 
 export default function Dashboard() {
+  
+  console.log("🔥 DASHBOARD NUEVO");
 
 const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
