@@ -41,6 +41,7 @@ export default function BotSettings() {
       );
 
       setAccounts(res.data);
+      console.log("DATOS", res);
 
       
 
