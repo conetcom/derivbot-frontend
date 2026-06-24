@@ -151,16 +151,7 @@ const getProgress = (
 
       setAccounts(res.data);
 
-      if (res.data.length > 0) {
-
-        setSelectedAccount(
-          res.data[0]
-        );
-
-        setBalance(
-          Number(res.data[0].balance)
-        );
-      }
+     
 
     } catch (err) {
 
