@@ -194,7 +194,7 @@ const startBot = async () => {
   >
 
     <h2 className="mb-3 text-center">
-      🚀 Trading Bot Dashboard
+      🚀 Trading Bot Dashboard VERSION FINAL
     </h2>
 
     <div className="mb-3 text-center">
