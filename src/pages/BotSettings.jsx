@@ -67,11 +67,19 @@ export default function BotSettings() {
           }
         }
       );
+if (res.data) {
 
-      if (res.data) {
-        setSettings(res.data);
-      }
+  setSettings({
+    symbol: res.data.symbol,
+    strategy: res.data.strategy,
+    stake: res.data.stake,
+    targetProfit: res.data.target_profit,
+    stopLoss: res.data.stop_loss,
+    maxDrawdown: res.data.max_drawdown,
+    deriv_account: res.data.deriv_account
+  });
 
+}
     } catch (err) {
       console.error(err);
     }
