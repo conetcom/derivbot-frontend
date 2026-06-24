@@ -76,7 +76,7 @@ if (res.data) {
     targetProfit: res.data.target_profit,
     stopLoss: res.data.stop_loss,
     maxDrawdown: res.data.max_drawdown,
-    deriv_account: res.data.deriv_account
+    deriv_account: res.data.account
   });
 
 }
@@ -114,7 +114,12 @@ if (res.data) {
 
     const token =
       localStorage.getItem("token");
+console.log("selectedAccount:", selectedAccount);
 
+console.log("payload:", {
+  ...settings,
+  deriv_account: selectedAccount?.id
+});
     await axios.post(
       "/api/bot-settings",
       {
@@ -157,7 +162,7 @@ useEffect(() => {
         a =>
           Number(a.id) ===
           Number(
-            settings.deriv_account
+            settings.account
           )
       );
 
@@ -168,7 +173,7 @@ useEffect(() => {
 
 }, [
   accounts,
-  settings.deriv_account
+  settings.account
 ]);
 
 return (
@@ -285,7 +290,7 @@ return (
                   type="number"
                   className="form-control"
                   name="targetProfit"
-                  value={settings.targetProfit}
+                  value={settings.target_Profit}
                   onChange={handleChange}
                 />
               </div>
@@ -303,7 +308,7 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="stopLoss"
+                  name="stop_Loss"
                   value={settings.stopLoss}
                   onChange={handleChange}
                 />
