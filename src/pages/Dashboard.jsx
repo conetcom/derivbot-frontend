@@ -23,6 +23,7 @@ const navigate = useNavigate();
   // STATES
   // =========================
 const [accounts, setAccounts] = useState([]);
+const [selectedAccount, setSelectedAccount] = useState(null);
   const [balance, setBalance] = useState(0);
 
   const [sessionProfit, setSessionProfit] = useState(0);
@@ -178,17 +179,10 @@ const getProgress = (
   // BOT START
   // =========================
 
-  const startBot = async () => {
+const startBot = async () => {
   try {
 
-    if (!selectedAccount) {
-      alert("Seleccione una cuenta");
-      return;
-    }
-
-    await startBotService({
-      accountId: selectedAccount.id
-    });
+    await startBotService();
 
   } catch (err) {
 

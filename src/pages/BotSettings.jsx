@@ -6,9 +6,9 @@ import AccountSelector from "../components/dashboard/AccountSelector";
 export default function BotSettings() {
 
   const navigate = useNavigate();
-
+ const [balance, setBalance] = useState(0);
   const [accounts, setAccounts] = useState([]);
-  //const [selectedAccount, setSelectedAccount] = useState(null);
+  const [selectedAccount, setSelectedAccount] = useState(null);
 
   const [settings, setSettings] = useState({
     symbol: "R_75",
@@ -16,7 +16,8 @@ export default function BotSettings() {
     stake: 1,
     targetProfit: 10,
     stopLoss: 10,
-    maxDrawdown: 20
+    maxDrawdown: 20,
+    deriv_account: null
   });
 
   // =========================
@@ -40,9 +41,7 @@ export default function BotSettings() {
 
       setAccounts(res.data);
 
-      if (res.data.length > 0) {
-        setSelectedAccount(res.data[0]);
-      }
+      
 
     } catch (err) {
       console.error(err);
@@ -102,38 +101,66 @@ export default function BotSettings() {
 
   const handleSave = async () => {
 
-    try {
+  try {
 
-      const token =
-        localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token");
 
-      await axios.post(
-        "/api/bot-settings",
-        {
-          ...settings,
-          accountId: selectedAccount?.id
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+    await axios.post(
+      "/api/bot-settings",
+      {
+        ...settings,
+        deriv_account:
+          selectedAccount?.id
+      },
+      {
+        headers: {
+          Authorization:
+            `Bearer ${token}`
         }
+      }
+    );
+
+    alert(
+      "Configuración guardada"
+    );
+
+    navigate("/dashboard");
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      "Error guardando configuración"
+    );
+  }
+};
+useEffect(() => {
+
+  if (
+    accounts.length > 0 &&
+    settings.deriv_account
+  ) {
+
+    const account =
+      accounts.find(
+        a =>
+          Number(a.id) ===
+          Number(
+            settings.deriv_account
+          )
       );
 
-      alert("Configuración guardada");
-
-      navigate("/dashboard");
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert(
-        "Error guardando configuración"
-      );
+    if (account) {
+      setSelectedAccount(account);
     }
-  };
+  }
 
+}, [
+  accounts,
+  settings.deriv_account
+]);
 
 return (
   <div className="container mt-4">
@@ -150,6 +177,12 @@ return (
               💳 Cuenta Deriv
             </h5>
           </div>
+          <div className="col-lg-4">
+              <Metrics
+                balance={balance}
+               
+              />
+            </div>
 
           <div className="card-body">
 

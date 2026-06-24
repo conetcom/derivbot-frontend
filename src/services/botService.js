@@ -6,16 +6,14 @@ const API_URL =
 // ===============================
 // 🚀 START BOT
 // ===============================
-export const startBot = async ({
-  accountId
-}) => {
+export const startBot = async () => {
 
   const token =
     localStorage.getItem("token");
 
   const res = await axios.post(
 
-    `${API_URL}/start/${accountId}`,
+    `${API_URL}/start/`,
 
     {},
 
