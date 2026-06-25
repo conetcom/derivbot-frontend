@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AccountSelector from "../components/dashboard/AccountSelector";
-import Metrics from "../components/dashboard/MetricsPanel";
-
 export default function BotSettings() {
 
   const navigate = useNavigate();
@@ -55,36 +53,38 @@ export default function BotSettings() {
   // =========================
 
   const fetchBotSettings = async () => {
-    try {
+  try {
+    const token =
+      localStorage.getItem("token");
 
-      const token =
-        localStorage.getItem("token");
-
-      const res = await axios.get(
-        "/api/bot-settings",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+    const res = await axios.get(
+      "/api/bot-settings",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
-if (res.data) {
+      }
+    );
 
-  setSettings({
-    symbol: res.data.symbol,
-    strategy: res.data.strategy,
-    stake: res.data.stake,
-    targetProfit: res.data.target_profit,
-    stopLoss: res.data.stop_loss,
-    maxDrawdown: res.data.max_drawdown,
-    deriv_account: res.data.account
-  });
+    if (res.data) {
 
-}
-    } catch (err) {
-      console.error(err);
+      setSettings({
+        symbol: res.data.symbol,
+        strategy: res.data.strategy,
+        stake: res.data.stake,
+        targetProfit: res.data.target_profit,
+        stopLoss: res.data.stop_loss,
+        maxDrawdown: res.data.max_drawdown,
+        deriv_account:
+          res.data.account_id
+      });
+
     }
-  };
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   useEffect(() => {
     fetchAccounts();
@@ -110,27 +110,33 @@ if (res.data) {
   };
 
 const handleSave = async () => {
-  console.log("selectedAccount:", selectedAccount);
-
-  console.log("payload:", {
-    ...settings,
-    deriv_account: selectedAccount?.id
-  });
-
   try {
 
+    if (!selectedAccount) {
+      alert("Debes seleccionar una cuenta");
+      return;
+    }
+
+    const payload = {
+      symbol: settings.symbol,
+      strategy: settings.strategy,
+      stake: settings.stake,
+      targetProfit: settings.targetProfit,
+      stopLoss: settings.stopLoss,
+      maxDrawdown: settings.maxDrawdown,
+
+      // Cuenta Deriv real
+      deriv_account: selectedAccount.account_id
+    };
+
     console.log(
-      "selectedAccount:",
+      "💾 Cuenta seleccionada:",
       selectedAccount
     );
 
     console.log(
-      "payload:",
-      {
-        ...settings,
-        deriv_account:
-          selectedAccount?.id
-      }
+      "📤 Payload:",
+      payload
     );
 
     const token =
@@ -138,30 +144,29 @@ const handleSave = async () => {
 
     await axios.post(
       "/api/bot-settings",
-      {
-        ...settings,
-        deriv_account:
-          selectedAccount?.id
-      },
+      payload,
       {
         headers: {
-          Authorization:
-            `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       }
     );
 
     alert(
-      "Configuración guardada"
+      "Configuración guardada correctamente"
     );
 
     navigate("/dashboard");
 
   } catch (err) {
 
-    console.error(err);
+    console.error(
+      "Error guardando configuración:",
+      err
+    );
 
     alert(
+      err.response?.data?.error ||
       "Error guardando configuración"
     );
   }
@@ -173,23 +178,23 @@ useEffect(() => {
     settings.deriv_account
   ) {
 
-    const account =
-      accounts.find(
-        a =>
-          Number(a.id) ===
-          Number(
-            settings.account
-          )
-      );
+    const account = accounts.find(
+  a =>
+    a.account_id ===
+    settings.deriv_account
+);
 
-    if (account) {
-      setSelectedAccount(account);
-    }
+  if (account) {
+  setSelectedAccount(account);
+  setBalance(
+    Number(account.balance || 0)
+  );
+}
   }
 
 }, [
-  accounts,
-  settings.account
+   accounts,
+  settings.deriv_account
 ]);
 
 return (
@@ -309,8 +314,8 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="target_profit"
-                  value={settings.target_profit}
+                  name="targetProfit"
+                  value={settings.targetProfit}
                   onChange={handleChange}
                 />
               </div>
@@ -328,8 +333,8 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="stop_loss"
-                  value={settings.stop_loss}
+                  name="stopLoss"
+                  value={settings.stopLoss}
                   onChange={handleChange}
                 />
               </div>
@@ -342,8 +347,8 @@ return (
                 <input
                   type="number"
                   className="form-control"
-                  name="max_drawdown"
-                  value={settings.max_drawdown}
+                  name="maxDrawdown"
+                  value={settings.maxDrawdown}
                   onChange={handleChange}
                 />
               </div>
