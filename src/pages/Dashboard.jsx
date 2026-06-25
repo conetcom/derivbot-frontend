@@ -194,7 +194,7 @@ const startBot = async () => {
   >
 
     <h2 className="mb-3 text-center">
-      🚀 Trading Bot Dashboard VERSION 1.0 </h2>
+      🚀 Trading Bot Dashboard MARTINGALE</h2>
 
     <div className="mb-3 text-center">
       <strong>Estado:</strong>{" "}

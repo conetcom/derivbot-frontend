@@ -16,7 +16,8 @@ export default function BotSettings() {
     targetProfit: 10,
     stopLoss: 10,
     maxDrawdown: 20,
-    deriv_account: null
+    deriv_account: null,
+    martingale: 0
   });
 
   // =========================
@@ -75,8 +76,8 @@ export default function BotSettings() {
         targetProfit: res.data.target_profit,
         stopLoss: res.data.stop_loss,
         maxDrawdown: res.data.max_drawdown,
-        deriv_account:
-          res.data.account_id
+        deriv_account:res.data.account_id,
+        martingale: res.data.martingale
       });
 
     }
@@ -124,9 +125,9 @@ const handleSave = async () => {
       targetProfit: settings.targetProfit,
       stopLoss: settings.stopLoss,
       maxDrawdown: settings.maxDrawdown,
-
       // Cuenta Deriv real
-      deriv_account: selectedAccount.account_id
+      deriv_account: selectedAccount.account_id,
+      martingale: settings.martingale      
     };
 
     console.log(
@@ -288,7 +289,26 @@ return (
                 <option value="syntheticPro">Synthetic Pro</option>
               </select>
             </div>
+<div className="mb-3">
+  <label className="form-label">
+    Martingale (0-9)
+  </label>
 
+  <input
+    type="number"
+    className="form-control"
+    name="martingale"
+    value={settings.martingale}
+    min={0}
+    max={9}
+    step={1}
+    onChange={handleChange}
+  />
+
+  <small className="text-muted">
+    Valor permitido: 0 a 9
+  </small>
+</div>
             {/* FILA 1 */}
             <div className="row">
 
